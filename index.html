@@ -219,10 +219,8 @@
 
         async function loadNews() {
             try {
-                // Versuche erst die lokale news.json mit Cache-Buster
                 let response = await fetch('news.json?' + new Date().getTime());
                 
-                // Falls das fehlschlägt, direkt über die GitHub Raw-URL laden
                 if (!response.ok) {
                     response = await fetch('https://raw.githubusercontent.com/svswke/schaufenster-svkroge/main/news.json?' + new Date().getTime());
                 }
@@ -237,13 +235,17 @@
                         incomingItems = [data];
                     }
 
-                    let mappedIncoming = incomingItems.map(item => ({
-                        category: item.category || "Buschfunk",
-                        date: item.date || "Neu",
-                        title: item.title || item.subject || "Buschfunk News",
-                        desc: item.desc || item.text || "",
-                        bg: item.bg || item.image || "https://images.ebcdn.de/club-7822/logo.png?v=51"
-                    }));
+                    let mappedIncoming = incomingItems.map(item => {
+                        let cleanText = (item.desc || item.text || "").replace(/\[cid:[^\]]+\]/g, "").trim();
+                        
+                        return {
+                            category: item.category || "Buschfunk",
+                            date: item.date || "Neu",
+                            title: item.title || item.subject || "Buschfunk News",
+                            desc: cleanText,
+                            bg: item.image || item.bg || "https://images.ebcdn.de/club-7822/logo.png?v=51"
+                        };
+                    });
 
                     if (mappedIncoming.length > 0) {
                         news = [...mappedIncoming, ...staticNews];
