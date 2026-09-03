@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="de" class="h-full bg-black">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>SV SW Kroge-Ehrendorf | Schaufenster-TV</title>
+    <link rel="icon" href="https://images.ebcdn.de/club-7822/logo.png?v=51&amp;width=32&amp;height=32&amp;mode=max"/>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;900&family=Raleway:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito Sans', 'sans-serif'],
+                        heading: ['Raleway', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Elfsight Platform Script -->
+    <script src="https://static.elfsight.com/platform/platform.js" async></script>
+
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 30s linear infinite;
+        }
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+</head>
+<body class="h-full text-white font-sans antialiased flex flex-col justify-between overflow-hidden select-none bg-black">
+
+    <!-- Header -->
+    <header class="bg-black/90 border-b border-zinc-800 px-6 py-3 flex justify-between items-center z-20 shadow-2xl shrink-0">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 relative flex items-center justify-center shrink-0">
+                <img src="https://images.ebcdn.de/club-7822/logo.png?v=51&width=148&format=webp&height=148&mode=max" alt="Wappen" class="max-h-full max-w-full object-contain"/>
+            </div>
+            <div>
+                <h1 class="font-heading text-xl font-black tracking-tight leading-none text-white uppercase">
+                    SV SW Kroge-Ehrendorf
+                </h1>
+                <p class="text-[11px] text-zinc-400 font-medium mt-1">
+                    Gemeinsam stark 🏴🏳️ Schaufenster-TV
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-5">
+            <span class="bg-zinc-900 text-zinc-200 border border-zinc-700 px-3 py-0.5 rounded-full flex items-center gap-2 font-bold text-xs uppercase tracking-wider">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> LIVE
+            </span>
+            <span id="clock" class="font-mono text-white font-black text-xl">--:--</span>
+        </div>
+    </header>
+
+    <!-- Main Content: 3-Spalten-Layout -->
+    <main class="flex-1 grid grid-cols-12 gap-3 p-3 bg-zinc-950 overflow-hidden relative">
+        
+        <!-- 1. SPALTE (Links): Großer aktiver Teaser (Wieder heller mit opacity-50) -->
+        <div class="col-span-5 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-4 flex flex-col justify-between overflow-hidden shadow-xl relative">
+            <div id="activeSlideBg" class="absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-50"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-transparent"></div>
+
+            <div class="relative z-10 flex justify-between items-center pb-2 border-b border-zinc-800/80">
+                <h3 class="font-heading text-xs font-black text-zinc-200 uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Aktueller Vereins-Beitrag
+                </h3>
+                <span id="slideCounter" class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/90 px-2.5 py-0.5 rounded border border-emerald-500/30">1/4</span>
+            </div>
+
+            <!-- Überschrift & Text -->
+            <div class="relative z-10 mt-auto pt-10 pb-4">
+                <div class="flex items-center gap-2.5 mb-3">
+                    <span id="activeCategory" class="bg-emerald-500 text-black font-heading text-xs font-black px-3 py-1 rounded uppercase tracking-wider shadow">Kategorie</span>
+                    <span id="activeDate" class="text-xs font-mono text-white font-bold bg-zinc-900/90 px-2.5 py-1 rounded border border-zinc-700">Datum</span>
+                </div>
+                <h2 id="activeTitle" class="font-heading text-2xl font-black text-white leading-snug drop-shadow-md mb-2">Titel wird geladen...</h2>
+                <p id="activeDesc" class="text-xs text-zinc-200 leading-relaxed drop-shadow-md line-clamp-4 font-medium">Beschreibung wird geladen...</p>
+            </div>
+
+            <!-- Unten links: WhatsApp Channel Hinweis -->
+            <div class="relative z-10 pt-2 border-t border-zinc-800/80 flex justify-between items-center">
+                <a href="https://whatsapp.com/channel/0029VauPDod5Ui2UnvNgNl22" target="_blank" class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1.5 hover:underline">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> WhatsApp-Channel beitreten ↗
+                </a>
+                <span class="text-[10px] text-zinc-400 font-mono">svkroge-ehrendorf.de</span>
+            </div>
+        </div>
+
+        <!-- 2. SPALTE (Mitte): Geteilt in Bereich 2 (News Oben) und Bereich 3 (Platz-Status Unten) -->
+        <div class="col-span-3 flex flex-col gap-3">
+            
+            <!-- Bereich 2: News (Genau 4 Vorschau-Karten) -->
+            <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-3 flex flex-col justify-between shadow-xl shrink-0">
+                <div class="flex justify-between items-center mb-2 pb-1 border-b border-zinc-800 shrink-0">
+                    <h3 class="font-heading text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        Beiträge (4 Vorschau)
+                    </h3>
+                </div>
+                <div id="newsGrid" class="flex flex-col gap-2">
+                    <!-- Wird dynamisch per JavaScript befüllt -->
+                </div>
+            </div>
+
+            <!-- Bereich 3: Platz-Live-Status -->
+            <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-3 flex-1 flex flex-col justify-between shadow-xl min-h-0">
+                <div class="flex justify-between items-center mb-2 pb-1 border-b border-zinc-800 shrink-0">
+                    <h3 class="font-heading text-xs font-black text-zinc-300 uppercase tracking-widest flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Platz-Live-Status
+                    </h3>
+                    <a href="https://sportplatz-status.web.app/Platz.html" target="_blank" class="text-[9px] text-emerald-400 hover:underline font-mono">Öffnen ↗</a>
+                </div>
+                <div class="flex-1 rounded-xl overflow-hidden bg-black border border-zinc-800 relative shadow-inner min-h-[140px]">
+                    <iframe src="https://sportplatz-status.web.app/Platz.html" class="w-full h-full border-0 pointer-events-none"></iframe>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 4. SPALTE (Rechts): Elfsight Instagram Feed vollflächig -->
+        <div class="col-span-4 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-3 flex flex-col justify-between overflow-hidden shadow-xl">
+            
+            <div class="flex justify-between items-center mb-2 pb-1 border-b border-zinc-800 shrink-0">
+                <h3 class="font-heading text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Instagram Live-Feed
+                </h3>
+                <span class="text-[9px] text-zinc-400 font-mono">@svswkrogeehrendorf</span>
+            </div>
+
+            <!-- Elfsight Widget Container -->
+            <div class="flex-1 rounded-xl overflow-hidden bg-black/40 border border-zinc-800 relative shadow-inner p-1 flex items-center justify-center overflow-y-auto">
+                <div class="elfsight-app-e2b51ac2-b999-4c88-b934-b220b4b15b3a w-full" data-elfsight-app-lazy></div>
+            </div>
+
+            <div class="mt-2 pt-2 border-t border-zinc-800 text-center shrink-0">
+                <p class="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Folgt uns auf Instagram & Co.</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-zinc-950 border-t border-zinc-800 py-2 px-6 overflow-hidden relative z-20 flex items-center shrink-0">
+        <span class="bg-emerald-500 text-black text-xs font-heading font-black px-3 py-0.5 rounded uppercase tracking-wider mr-4 shrink-0 shadow">
+            SV Kroge News
+        </span>
+        <div class="overflow-hidden w-full text-xs text-zinc-200 font-semibold tracking-wide">
+            <div class="animate-marquee">
+                +++ Herzlich Willkommen beim SV SW Kroge-Ehrendorf 1947 e.V. +++ Aktuelle Ergebnisse, Spieltage & Vereins-News +++ Ehrenamts-Gesuche & Jugendförderung +++
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic & Autoplay -->
+    <script>
+        let currentIndex = 0;
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        const news = [
+            {
+                category: "JSG B-Junioren I",
+                date: "31.08.2026",
+                title: "Neue Hoodies für die 1. B-Jugend der JSG Steinfeld",
+                desc: "Starker Auftritt abseits des Platzes: Fitline rüstet die 1. B-Jugend mit nagelneuen Hoodies aus.",
+                bg: "https://images.ebcdn.de/club-7822/ArticleTeaser_111734.jpg?v=2&width=800&format=webp&height=500&mode=crop"
+            },
+            {
+                category: "1. Herren",
+                date: "22.08.2026",
+                title: "An der Vördener Aue",
+                desc: "Kreisliga Vechta: BS Vörden gegen SV Kroge-Ehrendorf im spannenden Auswärtsspiel.",
+                bg: "https://images.ebcdn.de/club-7822/ArticleTeaser_111078.jpg?v=1&width=800&format=webp&height=500&mode=crop"
+            },
+            {
+                category: "Zeltlager",
+                date: "18.08.2026",
+                title: "Das Zeltlager Kroge entdeckt Münchhausen!",
+                desc: "Münchhausen gerockt, Ankum im Visier: Der ausführliche Rückblick auf die Zeltlager-Woche.",
+                bg: "https://images.ebcdn.de/club-7822/ArticleTeaser_110003.jpg?v=3&width=800&format=webp&height=500&mode=crop"
+            },
+            {
+                category: "1. Herren",
+                date: "13.08.2026",
+                title: "Derby-Sieg gegen Mühlen II",
+                desc: "Kroge-Ehrendorf dreht das packende Nachbarschaftsduell zum 3:0-Heimsieg.",
+                bg: "https://images.ebcdn.de/club-7822/ArticleTeaser_110591.jpg?v=3&width=800&format=webp&height=500&mode=crop"
+            }
+        ];
+
+        function renderApp() {
+            const item = news[currentIndex];
+            document.getElementById('activeCategory').innerText = item.category;
+            document.getElementById('activeDate').innerText = item.date;
+            document.getElementById('activeTitle').innerText = item.title;
+            document.getElementById('activeDesc').innerText = item.desc;
+            document.getElementById('activeSlideBg').style.backgroundImage = `url('${item.bg}')`;
+            document.getElementById('slideCounter').innerText = `${currentIndex + 1}/${news.length}`;
+
+            const newsGrid = document.getElementById('newsGrid');
+            newsGrid.innerHTML = news.map((s, i) => {
+                const isActive = i === currentIndex;
+                return `
+                    <div onclick="currentIndex=${i}; renderApp();" class="rounded-xl border overflow-hidden cursor-pointer transition-all flex gap-2.5 p-1.5 items-center ${isActive ? 'bg-emerald-950/40 border-emerald-500 shadow-md ring-1 ring-emerald-500/50' : 'bg-zinc-950/60 border-zinc-800 hover:border-zinc-700'}">
+                        <div class="w-12 h-12 bg-cover bg-center rounded-lg border border-zinc-800 shrink-0" style="background-image: url('${s.bg}')"></div>
+                        <div class="flex flex-col justify-center flex-1 min-w-0">
+                            <div class="flex justify-between items-center text-[8px] text-zinc-400 mb-0.5">
+                                <span class="uppercase font-bold tracking-wider text-emerald-400 truncate">${s.category}</span>
+                                <span class="font-mono shrink-0">${s.date}</span>
+                            </div>
+                            <div class="font-heading font-bold text-white text-[11px] truncate leading-tight">${s.title}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % news.length;
+            renderApp();
+        }
+
+        renderApp();
+        setInterval(nextSlide, 7000);
+    </script>
+</body>
+</html>
