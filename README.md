@@ -1,1 +1,0 @@
-# schaufenster-svkroge
