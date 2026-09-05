@@ -62,11 +62,16 @@
             </div>
         </div>
 
-        <div class="flex items-center gap-5">
+        <div class="flex items-center gap-4">
             <span class="bg-zinc-900 text-zinc-200 border border-zinc-700 px-3 py-0.5 rounded-full flex items-center gap-2 font-bold text-xs uppercase tracking-wider">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> LIVE
             </span>
-            <span id="clock" class="font-mono text-white font-black text-xl">--:--</span>
+            <!-- Datum und Uhrzeit kombiniert -->
+            <div class="flex items-center gap-3 bg-zinc-900/90 border border-zinc-700 px-3 py-1 rounded-xl">
+                <span id="date" class="font-mono text-zinc-300 font-bold text-sm">--.--.----</span>
+                <span class="text-zinc-600">|</span>
+                <span id="clock" class="font-mono text-white font-black text-lg">--:--</span>
+            </div>
         </div>
     </header>
 
@@ -96,10 +101,10 @@
                 <p id="activeDesc" class="text-xs text-zinc-200 leading-relaxed drop-shadow-md line-clamp-4 font-medium">Beschreibung wird geladen...</p>
             </div>
 
-            <!-- Unten links: Hinweis auf die Dorfgruppe -->
+            <!-- Unten links: Hinweis auf den Kroge-Ehrendorf Buschfunk -->
             <div class="relative z-10 pt-2 border-t border-zinc-800/80 flex justify-between items-center">
                 <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Infos aus dem Kroge-Dorffunk (860+ Mitglieder)
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Infos aus dem Kroge-Ehrendorf Buschfunk (860+ Mitglieder)
                 </span>
                 <span class="text-[10px] text-zinc-400 font-mono">svkroge-ehrendorf.de</span>
             </div>
@@ -210,12 +215,13 @@
 
         let news = [...staticNews];
 
-        function updateClock() {
+        function updateClockAndDate() {
             const now = new Date();
+            document.getElementById('date').innerText = now.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
             document.getElementById('clock').innerText = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        setInterval(updateClockAndDate, 1000);
+        updateClockAndDate();
 
         async function loadNews() {
             try {
