@@ -223,14 +223,24 @@
         setInterval(updateClockAndDate, 1000);
         updateClockAndDate();
 
-        // Hilfsfunktion zum Parsen des Datums (DD.MM.YYYY) für die automatische Sortierung
+        // Erweiterte Hilfsfunktion zum robusten Parsen von Datumsangaben (auch im YYYY-MM-DD Format)
         function parseDateString(dateStr) {
             if (!dateStr || dateStr === "Neu") return new Date(0);
+            
+            // Falls das Datum im Format YYYY-MM-DD (aus JSON/E-Mails) vorliegt
+            if (dateStr.includes('-') && dateStr.indexOf('-') === 4) {
+                return new Date(dateStr);
+            }
+            
+            // Falls das Datum im deutschen Format DD.MM.YYYY vorliegt
             const parts = dateStr.split('.');
             if (parts.length === 3) {
                 return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
             }
-            return new Date(0);
+            
+            // Allgemeiner Fallback
+            const parsed = Date.parse(dateStr);
+            return isNaN(parsed) ? new Date(0) : new Date(parsed);
         }
 
         async function loadNews() {
