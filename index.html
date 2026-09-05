@@ -223,6 +223,16 @@
         setInterval(updateClockAndDate, 1000);
         updateClockAndDate();
 
+        // Hilfsfunktion zum Parsen des Datums (DD.MM.YYYY) für die automatische Sortierung
+        function parseDateString(dateStr) {
+            if (!dateStr || dateStr === "Neu") return new Date(0);
+            const parts = dateStr.split('.');
+            if (parts.length === 3) {
+                return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+            }
+            return new Date(0);
+        }
+
         async function loadNews() {
             try {
                 let response = await fetch('news.json?' + new Date().getTime());
@@ -260,6 +270,10 @@
             } catch (error) {
                 console.log('Fehler beim Laden der news.json, nutze Standard-Beiträge.');
             }
+
+            // Vollautomatische Sortierung nach Datum (neueste Beiträge ganz oben)
+            news.sort((a, b) => parseDateString(b.date) - parseDateString(a.date));
+
             renderApp();
         }
 
