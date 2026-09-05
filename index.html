@@ -223,22 +223,15 @@
         setInterval(updateClockAndDate, 1000);
         updateClockAndDate();
 
-        // Erweiterte Hilfsfunktion zum robusten Parsen von Datumsangaben (auch im YYYY-MM-DD Format)
         function parseDateString(dateStr) {
             if (!dateStr || dateStr === "Neu") return new Date(0);
-            
-            // Falls das Datum im Format YYYY-MM-DD (aus JSON/E-Mails) vorliegt
             if (dateStr.includes('-') && dateStr.indexOf('-') === 4) {
                 return new Date(dateStr);
             }
-            
-            // Falls das Datum im deutschen Format DD.MM.YYYY vorliegt
             const parts = dateStr.split('.');
             if (parts.length === 3) {
                 return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
             }
-            
-            // Allgemeiner Fallback
             const parsed = Date.parse(dateStr);
             return isNaN(parsed) ? new Date(0) : new Date(parsed);
         }
@@ -258,30 +251,43 @@
                     if (Array.isArray(data)) {
                         incomingItems = data;
                     } else if (data && typeof data === 'object') {
-                        incomingItems = [data];
+                        // Falls Make.com versehentlich ein verschachteltes Objekt liefert
+                        incomingItems = data.text ? [data.text] : [data];
                     }
 
                     let mappedIncoming = incomingItems.map(item => {
-                        let cleanText = (item.desc || item.text || "").replace(/\[cid:[^\]]+\]/g, "").trim();
+                        // Unterstützt sowohl 'desc' als auch 'text', sowie 'image' als auch 'bg'
+                        let rawDesc = item.desc || item.text || "";
+                        if (typeof rawDesc === 'object') rawDesc = rawDesc.text || "";
+                        let cleanText = String(rawDesc).replace(/\[cid:[^\]]+\]/g, "").trim();
                         
+                        let rawTitle = item.title || item.subject || "";
+                        if (typeof rawTitle === 'object') rawTitle = rawTitle.title || "";
+
+                        let rawImage = item.image || item.bg || "";
+                        if (typeof rawImage === 'object') rawImage = rawImage.image || "";
+
+                        // Ignorieren, wenn Titel/Text komplett leer sind
+                        if (!rawTitle.trim() && !cleanText.trim()) return null;
+
                         return {
                             category: item.category || "Buschfunk",
                             date: item.date || "Neu",
-                            title: item.title || item.subject || "Buschfunk News",
+                            title: rawTitle.trim() || "Buschfunk News",
                             desc: cleanText,
-                            bg: item.image || item.bg || "https://images.ebcdn.de/club-7822/logo.png?v=51"
+                            bg: rawImage.trim() || "https://images.ebcdn.de/club-7822/logo.png?v=51"
                         };
-                    });
+                    }).filter(Boolean); // Entfernt ungültige/leere Einträge
 
                     if (mappedIncoming.length > 0) {
                         news = [...mappedIncoming, ...staticNews];
                     }
                 }
             } catch (error) {
-                console.log('Fehler beim Laden der news.json, nutze Standard-Beiträge.');
+                console.log('Fehler beim Laden der news.json, nutze Standard-Beiträge.', error);
             }
 
-            // Vollautomatische Sortierung nach Datum (neueste Beiträge ganz oben)
+            // Automatische Sortierung nach Datum (neueste Beiträge ganz oben)
             news.sort((a, b) => parseDateString(b.date) - parseDateString(a.date));
 
             renderApp();
